@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configureation 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+
+
+<tiles-definitions>
+
+	<!-- 모든 페이지에서 사용할 공통 템플릿 -->
+	<definition name="*.*" template="/WEB-INF/views/layout/template.jsp">
+	
+		<!-- 공용 조각 페이지 -->
+		<put-attribute name="asset" value="/WEB-INF/views/inc/asset.jsp"></put-attribute>
+		<put-attribute name="header" value="/WEB-INF/views/inc/header.jsp"></put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/views/inc/footer.jsp"></put-attribute>
+		<!-- <put-attribute name="init" value="/WEB-INF/views/inc/init.jsp"></put-attribute> -->
+		
+		<!-- 주업무 조각 페이지 -->
+		<put-attribute name="main" value="/WEB-INF/views/{1}/{2}.jsp"></put-attribute>
+		
+	</definition>
+
+</tiles-definitions>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!-- mybatis.xml -->
+<configuration>
+   
+   
+   <typeAliases>
+   
+   		<!-- DTO별칭 -->
+   		<!-- <typeAlias type="com.test.code.CodeDTO" alias="dto"/>
+   		<typeAlias type="com.test.code.CodeCommentDTO" alias="cdto"/>
+   		<typeAlias type="com.test.code.CodeLanguageDTO" alias="ldto"/>
+   		<typeAlias type="com.test.code.CodeLanguageLinkDTO" alias="cldto"/> -->
+   	
+   </typeAliases>
+   
+</configuration>
