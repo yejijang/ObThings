@@ -4,4 +4,69 @@
 
 <mapper namespace="ot">
 
+	<!-- 로그인하기 -->
+	<select id="signin" parameterType="map" resultType="mdto">
+		select memberSeq, id, password, name, nickName, phone, birth, gender, email,
+		address
+		from tblMember
+		where id= #{id} and password = #{password}
+	</select>
+	
+	<!-- 인기 프로젝트 리스트(8개) -->
+	<select id="populList" resultType="String">
+		select * from (
+        	select p.projectseq
+        	from tblFunding f
+        		inner join tblProjectPack pp on pp.packageseq = f.packageseq
+        		inner join tblProject p on p.projectseq = pp.projectseq
+        	where f.regdate &lt;= sysdate and f.regdate &gt; sysdate - 10 and startdate &lt;= sysdate and enddate &gt;= sysdate and p.status = 'y' and p.deleteok = 'n'
+        		group by p.projectseq
+        	order by count(*) desc)
+		where ROWNUM &lt;= 8
+	</select>
+	
+	<!-- 성공 임박 프로젝트 리스트(8개) -->
+	<select id="succList" resultType="String">
+	select * from (
+		select p.projectseq
+		from tblFunding f
+			inner join tblProjectPack pp on pp.packageseq = f.packageseq
+			inner join tblProject p on p.projectseq = pp.projectseq
+		where p.startdate &lt;= sysdate and p.enddate &gt;= sysdate and status = 'y' and deleteok = 'n'
+			group by p.projectseq, p.target
+				having p.target-sum(pp.price) > 0
+		order by p.target-sum(pp.price))
+	where ROWNUM &lt;= 8
+	</select>
+	
+	<!-- 신규 프로젝트 리스트(8개) -->
+	<select id="newList" resultType="String">
+		select *  from (
+			select projectseq
+			from tblProject
+			where startdate &lt;= sysdate and enddate &gt;= sysdate and status = 'y' and deleteok = 'n'
+			order by TRUNC(sysdate)-startdate)
+		where rownum &lt;= 8
+	</select>
+	
+	<!-- 프로젝트 정보 출력 -->
+	<select id="listInfo" parameterType="String" resultType="fundprojectdto">
+		select
+			p.projectseq, p.name, p.teamname, m.name as userName, enddate-TRUNC(sysdate) as meantime, p.target, p.thumImage
+		from tblProject p
+			inner join tblMember m on m.memberseq = p.memberseq
+		where projectseq = #{seq}
+	</select>
+	
+	<!-- 프로젝트에 해당하는 펀딩받은 총 금액 -->
+	<select id="totalPrice" parameterType="String" resultType="String">
+		select sum(pp.price) as totalPrice
+		from tblFunding f
+			inner join tblProjectPack pp on pp.packageseq = f.packageseq
+			inner join tblProject p on p.projectseq = pp.projectseq
+		where p.projectseq = #{seq}
+		group by p.projectseq
+		order by p.projectseq
+	</select>
+
 </mapper>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="fund">
+	
+	<!-- 카테고리 리스트 -->
+	<select id="categoryList" resultType="fundcategorydto">
+		select categorySeq, name from tblCategory order by categorySeq
+	</select>
+	
+	<!-- 인기 프로젝트 리스트(4개) -->
+	<select id="populList" resultType="String">
+		select * from (
+        	select p.projectseq
+        	from tblFunding f
+        		inner join tblProjectPack pp on pp.packageseq = f.packageseq
+        		inner join tblProject p on p.projectseq = pp.projectseq
+        	where f.regdate &lt;= sysdate and f.regdate &gt; sysdate - 7 and startdate &lt;= sysdate and enddate &gt;= sysdate and p.status = 'y' and p.deleteok = 'n'
+        		group by p.projectseq
+        	order by count(*) desc)
+		where ROWNUM &lt;= 4
+	</select>
+	
+	<!-- 성공 임박 프로젝트 리스트(4개) -->
+	<select id="succList" resultType="String">
+	select * from (
+		select p.projectseq
+		from tblFunding f
+			inner join tblProjectPack pp on pp.packageseq = f.packageseq
+			inner join tblProject p on p.projectseq = pp.projectseq
+		where p.startdate &lt;= sysdate and p.enddate &gt;= sysdate and status = 'y' and deleteok = 'n'
+			group by p.projectseq, p.target
+				having p.target-sum(pp.price) > 0
+		order by p.target-sum(pp.price))
+	where ROWNUM &lt;= 4
+	</select>
+	
+	<!-- 신규 프로젝트 리스트(4개) -->
+	<select id="newList" resultType="String">
+		select *  from (
+			select projectseq
+			from tblProject
+			where startdate &lt;= sysdate and enddate &gt;= sysdate and status = 'y' and deleteok = 'n'
+			order by TRUNC(sysdate)-startdate)
+		where rownum &lt;= 4
+	</select>
+	
+	<!-- 프로젝트 정보 출력 -->
+	<select id="listInfo" parameterType="String" resultType="fundprojectdto">
+		select
+			p.projectseq, p.name, p.teamname, m.name as userName, enddate-TRUNC(sysdate) as meantime, p.target, p.thumImage
+		from tblProject p
+			inner join tblMember m on m.memberseq = p.memberseq
+		where projectseq = #{seq}
+	</select>
+	
+	<!-- 프로젝트에 해당하는 펀딩받은 총 금액 -->
+	<select id="totalPrice" parameterType="String" resultType="String">
+		select sum(pp.price) as totalPrice
+		from tblFunding f
+			inner join tblProjectPack pp on pp.packageseq = f.packageseq
+			inner join tblProject p on p.projectseq = pp.projectseq
+		where p.projectseq = #{seq}
+		group by p.projectseq
+		order by p.projectseq
+	</select>
+	
+	<!-- 카테고리 선택시 해당하는 프로젝트 리스트 -->
+	<select id="projectList" parameterType="String" resultType="String">
+		select projectseq
+		from tblProject
+		where categoryseq = #{categoryseq} and startdate &lt;= sysdate and enddate &gt;= sysdate and status = 'y' and deleteok = 'n'
+		order by projectseq
+	</select>
+	
+	<!-- 카테고리 선택시 해당하는 카테고리명 -->
+	<select id="categoryName" parameterType="String" resultType="String">
+		select name from tblcategory where categoryseq = #{categoryseq}
+	</select>
+	
+	<!-- 프로젝트 선택시 해당하는 프로젝트 정보 -->
+	<select id="projectInfo" parameterType="String" resultType="fundprojectdto">
+	select p.*, m.name as userName, c.name as categoryName, p.enddate-TRUNC(sysdate) as meantime
+	from tblProject p
+		inner join tblmember m on p.memberseq = m.memberseq
+		inner join tblcategory c on p.categoryseq = c.categoryseq
+	where projectseq = #{projectseq}
+	</select>
+	
+	<!-- 프로젝트 선택시 해당하는 이미지 리스트 -->
+	<select id="projectImageList" parameterType="String" resultType="String">
+		select filename from tblcontentimage
+		where projectseq = #{projectseq}
+		order by contentimageseq
+	</select>
+	
+	<!-- 프로젝트 선택시 해당하는 후원자수 -->
+	<select id="projectTotalMember" parameterType="String" resultType="String">
+		select count(distinct f.memberseq) totalMember
+		from tblFunding f
+			inner join tblProjectPack pp on pp.packageseq = f.packageseq
+			inner join tblProject p on p.projectseq = pp.projectseq
+		where p.projectseq = #{projectseq}
+		order by f.memberseq
+	</select>
+	
+	<!-- 프로젝트 선택시 해당하는 프로젝트 패키지 리스트 -->
+	<select id="projectPackList" parameterType="String" resultType="fundprojectpackdto">
+		select * from tblprojectpack
+		where projectseq = #{projectseq}
+		order by packageseq
+	</select>
+	
+	<!-- 프로젝트 선택시 해당하는 프로젝트 후원자 성비 리스트 -->
+	<select id="genderList" parameterType="String" resultType="String">
+		select count(gender)
+		from tblFunding f
+			inner join tblProjectPack pp on pp.packageseq = f.packageseq
+			inner join tblProject p on p.projectseq = pp.projectseq
+			inner join tblMember m on f.memberseq = m.memberseq
+		where p.projectseq = #{projectseq}
+		group by gender
+		order by gender
+	</select>
+	
+	<!-- 프로젝트 선택시 해당하는 프로젝트 후원자 연령대 리스트 -->
+	<select id="ageGroupList" parameterType="String" resultType="fundprojectagegroupdto">
+		select ageGroup, count(*) ageGroupCnt from (
+			select (case 
+				        when birth &gt;= 10 and birth &lt; 20 then '10대'
+				        when birth &gt;= 20 and birth &lt; 30 then '20대'
+				        when birth &gt;= 30 and birth &lt; 40 then '30대'
+				        when birth &gt;= 40 and birth &lt; 50 then '40대'
+				        when birth &gt;= 50 then '50대 이상'
+				    end) ageGroup
+				from (select (2021-(case
+				        				when substr(birth, 0, 1) in ('0', '1', '2') then '20' || substr(birth, 0, 2)
+				        				else '19' || substr(birth, 0, 2) 
+				        			end) + 1) as birth
+					from tblFunding f
+				    	inner join tblProjectPack pp on pp.packageseq = f.packageseq
+				    	inner join tblProject p on p.projectseq = pp.projectseq
+				    	inner join tblMember m on f.memberseq = m.memberseq
+					where p.projectseq = #{projectseq})
+		) 
+		group by ageGroup
+		order by ageGroup
+	</select>
+	
+</mapper>
