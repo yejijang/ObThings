@@ -1,5 +1,7 @@
 package com.project.ot.funding;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,7 +94,8 @@ public class FundController {
 		List<ProjectPackDTO> projectPackList = dao.projectPackList(projectseq); // 프로젝트 패키지 리스트
 		List<String> genderList = dao.genderList(projectseq); // 프로젝트 후원자 성비 리스트
 		List<ProjectAgeGroupDTO> ageGroupList = dao.ageGroupList(projectseq); // 프로젝트 후원자 연령대 리스트
-		
+		List<NoticeDTO> noticeList = dao.noticeList(projectseq); // 프로젝트 공지사항 리스트
+
 		req.setAttribute("project", project);
 		req.setAttribute("projectImageList", projectImageList);
 		req.setAttribute("projectTotalMember", projectTotalMember);
@@ -100,8 +103,32 @@ public class FundController {
 		req.setAttribute("projectPackList", projectPackList);
 		req.setAttribute("genderList", genderList);
 		req.setAttribute("ageGroupList", ageGroupList);
+		req.setAttribute("noticeList", noticeList);
 
 		return "funding.funding";
+	}
+
+	@RequestMapping(value = "/funding/sendqa.action", method = { RequestMethod.POST })
+	public void sendqa(HttpServletRequest req, HttpServletResponse resp, HttpSession session, QADTO dto,
+			String projectSeq) {
+
+		dao.sendQa(dto);
+
+		try {
+			resp.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = resp.getWriter();
+			out.println("<script>alert('문의 내용이 전송되었습니다. :)'); location.href='/ot/funding/funding.action?projectseq=" + projectSeq + "';</script>");
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping(value = "/funding/sendwarn.action", method = { RequestMethod.POST })
+	public void sendwarn(HttpServletRequest req, HttpServletResponse resp, HttpSession session, String warnCategory, String content) {
+
+		
+
 	}
 
 }

@@ -81,4 +81,14 @@ public class FundingDAO {
 		return template.selectList("fund.ageGroupList", projectseq);
 	}
 
+	public List<NoticeDTO> noticeList(String projectseq) {
+		
+		return template.selectList("fund.noticeList", projectseq);
+	}
+
+	public int sendQa(QADTO dto) {
+		
+		return template.insert("fund.sendQa", dto);
+	}
+
 }

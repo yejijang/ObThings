@@ -14,6 +14,8 @@
    		<typeAlias type="com.project.ot.funding.CategoryDTO" alias="fundcategorydto"/>
    		<typeAlias type="com.project.ot.funding.ProjectPackDTO" alias="fundprojectpackdto"/>
    		<typeAlias type="com.project.ot.funding.ProjectAgeGroupDTO" alias="fundprojectagegroupdto"/>
+   		<typeAlias type="com.project.ot.funding.NoticeDTO" alias="fundnoticedto"/>
+   		<typeAlias type="com.project.ot.funding.QADTO" alias="fundqadto"/>
    	
    </typeAliases>
    

@@ -148,4 +148,12 @@
 		order by ageGroup
 	</select>
 	
+	<select id="noticeList" parameterType="String" resultType="fundnoticedto">
+		select * from tblnotice where projectseq = #{projectseq} order by regdate desc
+	</select>
+	
+	<insert id="sendQa" parameterType="fundqadto">
+		insert into tblQA (qaSeq, content, sMemberSeq, rMemberSeq) values (QaSeq.nextVal, #{content}, #{sMemberSeq}, #{rMemberSeq})
+	</insert>
+	
 </mapper>

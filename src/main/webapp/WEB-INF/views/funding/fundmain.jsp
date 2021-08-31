@@ -8,14 +8,30 @@
 
 <div id="categoryListArea">
 	<div id="categoryList">
-		<span class="category"
-			onclick="location.href='/ot/funding/fundmain.action';">전체보기</span>
-		<c:forEach items="${categoryList}" var="dto">
+		<div id="categoryPack">
 			<span class="category"
-				onclick="location.href='/ot/funding/fundmain.action?categoryseq=${dto.categorySeq}';">${dto.name}</span>
-		</c:forEach>
-		
-		<span>&#62;</span>
+				onclick="location.href='/ot/funding/fundmain.action';">전체보기</span>
+			<c:forEach items="${categoryList}" var="dto" end="5">
+				<span class="category"
+					onclick="location.href='/ot/funding/fundmain.action?categoryseq=${dto.categorySeq}';">${dto.name}</span>
+			</c:forEach>
+			<span class="next" id="next1">&#62;</span>
+			<br>
+			<span class="prev" id="prev1">&#60;</span>
+			<c:forEach items="${categoryList}" var="dto" begin="6" end="12">
+				<span class="category"
+					onclick="location.href='/ot/funding/fundmain.action?categoryseq=${dto.categorySeq}';">${dto.name}</span>
+			</c:forEach>
+			<span class="next" id="next2">&#62;</span>
+			<br>
+			<span style="margin-left: -387px;">
+				<span class="prev" id="prev2">&#60;</span>
+				<c:forEach items="${categoryList}" var="dto" begin="13">
+					<span class="category"
+						onclick="location.href='/ot/funding/fundmain.action?categoryseq=${dto.categorySeq}';">${dto.name}</span>
+				</c:forEach>
+			</span>
+		</div>
 	</div>
 </div>
 
@@ -282,6 +298,22 @@
 <script>
 	$('.card').click(function(){
 		location.href = '/ot/funding/funding.action?projectseq=' + $(this).data('projectseq');
-		/* alert($(this).data('projectseq')); */
 	});
+	
+	$('#next1').click(function() {
+		$('#categoryPack').css({'transform':'translateY(-28px)'});
+	});
+	
+	$('#next2').click(function() {
+		$('#categoryPack').css({'transform':'translateY(-56px)'});
+	});
+	
+	$('#prev1').click(function() {
+		$('#categoryPack').css({'transform':'translateY(0px)'});
+	});
+	
+	$('#prev2').click(function() {
+		$('#categoryPack').css({'transform':'translateY(-28px)'});
+	});
+
 </script>
