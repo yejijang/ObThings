@@ -6,6 +6,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.project.ot.MemberDTO;
+
 @Repository
 public class FundingDAO {
 
@@ -89,6 +91,41 @@ public class FundingDAO {
 	public int sendQa(QADTO dto) {
 		
 		return template.insert("fund.sendQa", dto);
+	}
+
+	public int sendWarn(WarningDTO dto) {
+		
+		return template.insert("fund.sendWarn", dto);
+	}
+
+	public ProjectPackDTO projectPack(String packageSeq) {
+		
+		return template.selectOne("fund.projectPack", packageSeq);
+	}
+
+	public MemberDTO memberInfo(String memberSeq) {
+		
+		return template.selectOne("fund.memberInfo", memberSeq);
+	}
+
+	public int paycomplete(FundingDTO dto) {
+		
+		return template.insert("fund.paycomplete", dto);
+	}
+
+	public List<String> projectLike(String projectSeq) {
+		
+		return template.selectList("fund.projectLike", projectSeq);	
+	}
+
+	public int dellike(LikeDTO dto) {
+		
+		return template.delete("fund.dellike", dto);
+	}
+
+	public int addlike(LikeDTO dto) {
+		
+		return template.insert("fund.addlike", dto);
 	}
 
 }

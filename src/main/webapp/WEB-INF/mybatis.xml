@@ -10,12 +10,15 @@
    
    		<typeAlias type="com.project.ot.MemberDTO" alias="mdto" />
    	
-   		<typeAlias type="com.project.ot.funding.ProjectDTO" alias="fundprojectdto"/>
+   	 	<typeAlias type="com.project.ot.funding.ProjectDTO" alias="projdto"/>
    		<typeAlias type="com.project.ot.funding.CategoryDTO" alias="fundcategorydto"/>
    		<typeAlias type="com.project.ot.funding.ProjectPackDTO" alias="fundprojectpackdto"/>
    		<typeAlias type="com.project.ot.funding.ProjectAgeGroupDTO" alias="fundprojectagegroupdto"/>
-   		<typeAlias type="com.project.ot.funding.NoticeDTO" alias="fundnoticedto"/>
-   		<typeAlias type="com.project.ot.funding.QADTO" alias="fundqadto"/>
+   		<typeAlias type="com.project.ot.funding.NoticeDTO" alias="noticedto"/>
+   		<typeAlias type="com.project.ot.funding.QADTO" alias="qadto"/>
+   		<typeAlias type="com.project.ot.funding.WarningDTO" alias="fundwarningdto"/>
+   		<typeAlias type="com.project.ot.funding.FundingDTO" alias="fundingdto"/>
+   		<typeAlias type="com.project.ot.funding.LikeDTO" alias="fundlikedto"/>
    	
    </typeAliases>
    

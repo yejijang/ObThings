@@ -14,13 +14,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <!-- /inc/asset.jsp -->
 
-
-
-
 <link rel="apple-touch-icon" href="<%= request.getContextPath() %>/resources/img/apple-icon.png">
 <link rel="shortcut icon" type="image/x-icon" href="<%= request.getContextPath() %>/resources/img/favicon.ico">
-
-
 
 <link rel="stylesheet" href="<%= request.getContextPath() %>/resources/css/bootstrap.min.css">
 <link rel="stylesheet" href="<%= request.getContextPath() %>/resources/css/templatemo.css">

@@ -1,4 +1,6 @@
 /* fund.css */
+
+/* fundmain.jsp */
 .row.fundList {
 	width: 900px;
 	margin: 0 auto;
@@ -120,6 +122,7 @@ body .container.py-5 .row.fundList .card.h-80 .card-body div.fundMember
 	text-decoration: underline;
 }
 
+/* funding.jsp */
 #projectMain {
 	width: 1200px;
 	margin: 100px auto;
@@ -288,24 +291,22 @@ body .container.py-5 .row.fundList .card.h-80 .card-body div.fundMember
 	display: none;
 }
 
-#main #content:checked ~ #noticeinfo,
-#main #content:checked ~ #qainfo {
+#main #content:checked ~ #noticeinfo, #main #content:checked ~ #qainfo {
 	display: none;
 }
 
-#main #notice:checked ~ #contentinfo,
-#main #notice:checked ~ #qainfo {
+#main #notice:checked ~ #contentinfo, #main #notice:checked ~ #qainfo {
 	display: none;
 }
 
-#main #qa:checked ~ #noticeinfo,
-#main #qa:checked ~ #contentinfo {
+#main #qa:checked ~ #noticeinfo, #main #qa:checked ~ #contentinfo {
 	display: none;
 }
 
 #main label {
 	border: 1px solid #ddd;
-	border-radius: 5px; float : left;
+	border-radius: 5px;
+	float: left;
 	width: 150px;
 	text-align: center;
 	padding-top: 15px;
@@ -313,7 +314,7 @@ body .container.py-5 .row.fundList .card.h-80 .card-body div.fundMember
 	cursor: pointer;
 	margin-bottom: 20px;
 	margin-right: 10px;
-	font-size : 14px !important;
+	font-size: 14px !important;
 	font-weight: bold !important;
 	font-size: 14px !important;
 	float: left;
@@ -357,8 +358,8 @@ input[type=radio]:checked+label {
 	padding: 10px;
 }
 
-#warnModal {
-	transform: translateY(25%);
+#warnModal .modal-dialog {
+	width: 400px;
 }
 
 .form-group label {
@@ -370,4 +371,141 @@ input[type=radio]:checked+label {
 #warnModal #warnContent {
 	resize: none;
 	height: 150px;
+}
+
+/* fundpayment.jsp */
+#fundPayment {
+	width: 1000px;
+	margin: 100px auto;
+}
+
+#fundPayment #payProject {
+	width: 1000px;
+	height: 210px;
+	margin-bottom: 30px;
+}
+
+#fundPayment .payProjectTable tr td {
+	border: 0px;
+}
+
+#fundPayment .payProjectTable tr:nth-child(1) td:nth-child(1) {
+	position: relative;
+	width: 300px;
+	height: 210px;
+	overflow: hidden;
+}
+
+#fundPayment .payProjectTable tr:nth-child(1) td:nth-child(1) img {
+	position: absolute;
+	width: 100%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#fundPayment .payProjectTable tr td:nth-child(2),
+#fundPayment .payProjectTable tr:nth-child(2) td,
+#fundPayment .payProjectTable tr:nth-child(3) td {
+	width: 700px;
+	height: 70px;
+	padding-left: 20px;
+}
+
+#fundPayment .payProjectTable tr:nth-child(1),
+#fundPayment .payProjectTable tr:nth-child(3) {
+	font-size: 14px !important;
+}
+
+#fundPayment .payProjectTable tr:nth-child(1) td:nth-child(2) {
+	vertical-align: bottom;
+}
+
+#fundPayment .payProjectTable tr:nth-child(3) td span {
+	display: inline-block;
+	margin-right: 10px;
+}
+
+#fundPayment .payProjectTable tr:nth-child(3) td span:nth-child(1) {
+	font-weight: bold;
+}
+
+#fundPayment .payProjectTable tr:nth-child(3) td span:nth-child(2) {
+	color: #59AB6E;
+}
+
+#fundPayment .payProjectTable #projectTitle {
+	font-size: 20px;
+	font-weight: bold;
+	vertical-align: middle;
+}
+
+#fundPayment #payContentSection {
+	display: flex;
+	border-top: 1px solid #ddd;
+}
+
+#fundPayment #payContent {
+	width: 600px;
+	padding-top: 30px;
+}
+
+#fundPayment #payContent .payContentInfo {
+	font-size: 14px !important;
+	padding-right: 10px;
+}
+
+#fundPayment .payContentInfo h4 {
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+#fundPayment #payContent .payContentInfo table {
+	border: 1px solid #ddd;
+}
+
+#fundPayment #payContent .payContentInfo table tr td:nth-child(1) {
+	font-weight: bold;
+	width: 100px;
+}
+
+#fundPayment #payContent .payContentInfo table tr td {
+	border: 0px;
+	padding: 12px;
+}
+
+#fundPayment #payPriceInfo {
+	width: 400px;
+	padding-left: 10px;
+	margin-top: 59px;
+}
+
+#fundPayment #payPriceInfo #payPrice .payPrice {
+	border: 1px solid #ddd;
+	font-size: 14px !important;
+	font-weight: bold;
+}
+
+#fundPayment #payPriceInfo #payPrice .payPrice tr td {
+	border: 0px;
+	padding: 12px;
+}
+
+#fundPayment #payPriceInfo #payPrice .payPrice tr td:nth-child(2) {
+	text-align: right;
+}
+
+#fundPayment #payPriceInfo #payPrice .payPrice tr:nth-child(3) td:nth-child(1) {
+	color: #59AB6E;
+}
+
+#fundPayment #payPriceInfo .paybtn {
+	width: 100%;
+	background-color: #59AB6E;
+	color: #fff;
+	font-align: bold;
+	padding-top: 13px;
+	padding-bottom: 13px;
+	
 }

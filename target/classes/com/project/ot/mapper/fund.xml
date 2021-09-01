@@ -47,7 +47,7 @@
 	</select>
 	
 	<!-- 프로젝트 정보 출력 -->
-	<select id="listInfo" parameterType="String" resultType="fundprojectdto">
+	<select id="listInfo" parameterType="String" resultType="projdto">
 		select
 			p.projectseq, p.name, p.teamname, m.name as userName, enddate-TRUNC(sysdate) as meantime, p.target, p.thumImage
 		from tblProject p
@@ -80,7 +80,7 @@
 	</select>
 	
 	<!-- 프로젝트 선택시 해당하는 프로젝트 정보 -->
-	<select id="projectInfo" parameterType="String" resultType="fundprojectdto">
+	<select id="projectInfo" parameterType="String" resultType="projdto">
 	select p.*, m.name as userName, c.name as categoryName, p.enddate-TRUNC(sysdate) as meantime
 	from tblProject p
 		inner join tblmember m on p.memberseq = m.memberseq
@@ -148,12 +148,49 @@
 		order by ageGroup
 	</select>
 	
-	<select id="noticeList" parameterType="String" resultType="fundnoticedto">
+	<!-- 프로젝트 선택시 해당하는 문의내역 리스트 -->
+	<select id="noticeList" parameterType="String" resultType="noticedto">
 		select * from tblnotice where projectseq = #{projectseq} order by regdate desc
 	</select>
 	
-	<insert id="sendQa" parameterType="fundqadto">
+	<!-- 문의내역 삽입 -->
+	<insert id="sendQa" parameterType="qadto">
 		insert into tblQA (qaSeq, content, sMemberSeq, rMemberSeq) values (QaSeq.nextVal, #{content}, #{sMemberSeq}, #{rMemberSeq})
+	</insert>
+	
+	<!-- 신고내역 삽입 -->
+	<insert id="sendWarn" parameterType="fundwarningdto">
+		insert into tblWarning (warningSeq, content, regdate, warnCategory, sMemberSeq, rMemberSeq) values (warningSeq.nextVal, #{content}, default, #{warnCategory}, #{sMemberSeq}, #{rMemberSeq})
+	</insert>
+	
+	<!-- 결제 진행시 선택한 패키지 정보 -->
+	<select id="projectPack" parameterType="String" resultType="fundprojectpackdto">
+		select * from tblProjectPack where packageSeq = #{packageSeq}
+	</select>
+	
+	<!-- 결제 진행시 로그인한 회원 정보 -->
+	<select id="memberInfo" parameterType="String" resultType="mdto">
+		select * from tblMember where memberSeq = #{memberSeq}
+	</select>
+	
+	<!-- 결제 성공 > 펀딩내역 삽입 -->
+	<insert id="paycomplete" parameterType="fundingdto">
+		insert into tblFunding (fundingSeq, regdate, packageSeq, memberSeq, usePoint) values (fundingSeq.nextVal, default, #{packageSeq}, #{memberSeq}, 0)
+	</insert>
+	
+	<!-- 해당 프로젝트 찜한 회원 리스트 -->
+	<select id="projectLike" parameterType="String" resultType="String">
+		select memberSeq from tbllike where projectSeq = #{projectSeq}
+	</select>
+	
+	<!-- 프로젝트 찜한 목록 삭제 -->
+	<delete id="dellike" parameterType="fundlikedto">
+		delete from tblLike where memberSeq = #{memberSeq} and projectSeq = #{projectSeq}
+	</delete>
+	
+	<!-- 프로젝트 찜한 목록 삽입 -->
+	<insert id="addlike" parameterType="fundlikedto">
+		insert into tblLike (likeSeq, projectSeq, memberSeq) values (likeSeq.nextVal, #{projectSeq}, #{memberSeq})
 	</insert>
 	
 </mapper>

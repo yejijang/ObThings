@@ -50,7 +50,7 @@
 	</select>
 	
 	<!-- 프로젝트 정보 출력 -->
-	<select id="listInfo" parameterType="String" resultType="fundprojectdto">
+	<select id="listInfo" parameterType="String" resultType="projdto">
 		select
 			p.projectseq, p.name, p.teamname, m.name as userName, enddate-TRUNC(sysdate) as meantime, p.target, p.thumImage
 		from tblProject p

@@ -67,13 +67,13 @@
 						<td id="projectLike" class="nonLike" title="찜하기">&#128420;</td>
 					</c:if>
 					<c:if test="${not empty memberSeq}">
-						<td id="projectLike" class="like" title="찜하기">&#128152;</td>
+						<td id="projectLike" class="like" title="찜하기"><c:if test="${projectLike == 0}">&#128420;</c:if><c:if test="${projectLike == 1}">&#128152;</c:if></td>
 					</c:if>
 					<td>
-						<button type="button" class="btn btn-primary">펀딩하기</button>
+						<button type="button" class="btn btn-primary" onclick="scrollPack();">펀딩하기</button>
 					</td>
 					<td>
-						<button type="button" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#warnModal">&#128680;신고</button>
+						<button type="button" class="btn btn-default" onclick="loginCheck();">&#128680;신고</button>
 					</td>
 				</tr>
 			</table>
@@ -96,19 +96,15 @@
 								<option value="프로젝트 연관성">프로젝트 연관성</option>
 								<option value="욕설/비방">욕설/비방</option>
 								<option value="허위사실유포">허위사실유포</option>
+								<option value="기타">기타</option>
 							</select>
 						</div>
 
 						<textarea id="warnContent" name="content" class="form-control"></textarea>
 						
-						<input type="hidden" name="sMemberSeq" value="${memberSeq}">
-						<!-- 보낸사람: 문의사항 작성자 시퀀스 -->
-						<input type="hidden" name="rMemberSeq"
-							value="${project.memberSeq}">
-						<!-- 받는사람: 프로젝트 창작자 시퀀스 -->
-						<input type="hidden" name="projectSeq"
-							value="${project.projectSeq}">
-						<!-- 프로젝트 시퀀스 -->
+						<input type="hidden" name="sMemberSeq" value="${memberSeq}"> <!-- 신고자: 신고자 시퀀스 -->
+						<input type="hidden" name="rMemberSeq" value="${project.memberSeq}"> <!-- 신고대상: 프로젝트 창작자 시퀀스 -->
+						<input type="hidden" name="projectSeq" value="${project.projectSeq}"> <!-- 프로젝트 시퀀스 -->
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
@@ -182,7 +178,7 @@
 				<div class="chart" id="ageGroupChart"></div>
 			</c:if>
 			<c:forEach items="${projectPackList}" var="dto">
-				<div class="projectPack">
+				<div class="projectPack" onclick="paycheck(${project.projectSeq}, ${dto.packageSeq})">
 					<div class="projectPackName">
 						<fmt:formatNumber value="${dto.price}" type="number" /> 원 펀딩
 					</div>
@@ -196,22 +192,72 @@
 </div>
 
 <script>
+	/* 프로젝트 찜하기 */
 	$('#projectLike.like').click(function() {
 		
-		if ($(this).html() == '💘') {
-			$(this).html('&#128420;');
-		} else {
-			$(this).html('&#128152;');
-		}
+		let btn = event.srcElement;
 		
+		if ($(this).html() == '💘') {
+			/* 찜하기 취소 */
+	
+			$.ajax({
+				type: 'POST',
+				url: '/ot/funding/dellike.action',
+				data: 'projectSeq=' + ${project.projectSeq} + '&memberSeq=' + ${memberSeq},
+				dataType: 'json',
+				success: function(result) {
+					if (result == 1) {
+						$(btn).html('&#128420;');
+					}
+				},
+				error: function(a,b,c) {
+					console.log(a,b,c);
+				}
+			});
+			
+		} else {
+			/* 찜하기 */
+			
+			$.ajax({
+				type: 'POST',
+				url: '/ot/funding/addlike.action',
+				data: 'projectSeq=' + ${project.projectSeq} + '&memberSeq=' + ${memberSeq},
+				dataType: 'json',
+				success: function(result) {
+					if (result == 1) {
+						$(btn).html('&#128152;');
+					}
+				},
+				error: function(a,b,c) {
+					console.log(a,b,c);
+				}
+			});
+		}	
 	});
+	
+	/* 후원하기 버튼 클릭시 프로젝트 패키지 부분으로 이동 */
+	function scrollPack() {
+		var location = document.querySelector(".projectPack").offsetTop;
+		window.scrollTo({top:location - 100, behavior:'smooth'});
+	}
+	
+	/* 신고 모달 뜨기전 로그인 체크 */
+	function loginCheck() {
+		if (${empty memberSeq}) {
+			alert("로그인 이후에 이용해 주세요. :)");
+		} else {
+			$('#warnModal').modal('show');
+		}
+	}
 
+	/* 공지사항 아코디언 형식 */
 	$(".sub").click(function() {
 		$(this).next(".con").stop().slideToggle(300);
 		$(this).toggleClass('on').siblings().removeClass('on');
 		$(this).next(".con").siblings(".con").slideUp(300); // 1개씩 펼치기
 	});
 	
+	/* 문의하기 폼 전송 전에 체크 */
 	var q = document.qaform;
 	
 	function qacheck() {
@@ -225,19 +271,18 @@
 			return true;
 	}
 	
+	/* 신고하기 폼 전송 전에 체크 */
 	var w = document.warnform;
 	
 	function warncheck() {
-		if (w.sMemberSeq.value == '' || w.sMemberSeq.value == null) {
-			alert("로그인 이후에 이용해 주세요. :)");
-			return false;
-		} else if (w.content.value == '' || w.content.value == null) {
-			alert("문의 내용을 입력해 주세요. :)");
+		if (w.content.value == '' || w.content.value == null) {
+			alert("신고 내용을 입력해 주세요. :)");
 			return false;
 		} else
 			return true;
 	}
 	
+	/* 후원자 성비에 따른 그래프 출력 */
 	<c:if test="${projectTotalMember > 0}">
 		Highcharts.chart('genderChart', {
 			colors: ['#666666', '#999999'],
@@ -284,6 +329,7 @@
 		    }]
 		});
 		
+		/* 후원자 연령대에 따른 그래프 출력 */
 		Highcharts.chart('ageGroupChart', {
 			colors: ['#333333', '#666666', '#999999', '#dddddd'],
 		    chart: {
@@ -343,4 +389,13 @@
 		    ]
 		});
 	</c:if>
+	
+	function paycheck(projectSeq, packageSeq) {
+		if (${empty memberSeq}) {
+			alert("로그인 이후에 이용해 주세요. :)");
+			return false;
+		} else {
+			location.href='/ot/funding/fundpayment.action?projectSeq=' + projectSeq + '&packageSeq=' + packageSeq;
+		}
+	}
 </script>
