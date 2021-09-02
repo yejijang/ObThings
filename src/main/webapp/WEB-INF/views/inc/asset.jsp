@@ -14,8 +14,13 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <!-- /inc/asset.jsp -->
 
+
+
+
 <link rel="apple-touch-icon" href="<%= request.getContextPath() %>/resources/img/apple-icon.png">
 <link rel="shortcut icon" type="image/x-icon" href="<%= request.getContextPath() %>/resources/img/favicon.ico">
+
+
 
 <link rel="stylesheet" href="<%= request.getContextPath() %>/resources/css/bootstrap.min.css">
 <link rel="stylesheet" href="<%= request.getContextPath() %>/resources/css/templatemo.css">
@@ -26,3 +31,7 @@
 
 <!-- 예지CSS -->
 <link rel="stylesheet" href="<%= request.getContextPath() %>/resources/css/fund.css">
+<!-- 지민님css -->
+
+<!-- 지윤추가CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">

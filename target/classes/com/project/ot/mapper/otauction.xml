@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="otauction">
+
+	<select id="nowauction" parameterType="String" resultType="auctionDTO">
+		select * from tblAuction where auctionSeq = #{auctionSeq}
+	</select>
+	
+	<insert id="add" parameterType="hashMap">
+		insert into tblAuction(auctionSeq, name,regdate, startPrice, unitPrice, startTime,endTime, content,thumImage,images) 
+		values(auctionSeq.nextVal,#{name},sysdate,#{startPrice},#{unitPrice},#{startTime},#{endTime},#{content},#{thumImage},#{images})
+	</insert>
+	
+	<!-- <select id="mem" parameterType="String" resultType="memberDTO">
+		select * from tblMember where memberSeq = #{memSeq}
+	</select> -->
+	
+	<select id="aucList" parameterType="hashMap" resultType="aucListDTO">
+		select * from tblAucList where auctionSeq = #{auctionSeq} and memberSeq = #{memberSeq} 
+	</select>
+	
+	<select id="maxBiddingPrice" parameterType="String" resultType="String">
+		select max(biddingprice)
+		from tblauclist
+		where auctionSeq = #{auctionSeq}
+	</select>
+	
+	<insert id="addActList" parameterType="aucListDTO">
+		insert into tblAucList(aucListSeq,biddingPrice,status,memberSeq,auctionSeq,regdate)
+		values(aucListSeq.nextVal,#{biddingPrice},'y',#{memberSeq},#{auctionSeq},sysdate)
+	</insert>
+	
+	<update id="updateActList" parameterType="aucListDTO">
+		update tblAucList
+		set biddingPrice = #{biddingPrice},
+			regdate = sysdate
+		where auctionSeq = #{auctionSeq} and memberSeq = #{memberSeq}
+	</update>
+	
+	<select id="comfirmActList" parameterType="String" resultType="String">
+		select biddingprice from tblAucList where biddingprice = #{biddingPrice}
+	</select>
+	
+	<select id="scheduleAuction" resultType="auctionDTO">
+		select * 
+		from tblAuction 
+		where endtime > sysdate
+		order by starttime asc
+	</select>
+	
+	<select id="endAuction" resultType="auctionDTO">
+		select *
+		from tblAuction 
+		where sysdate > endtime
+		order by starttime desc
+	</select>
+	
+	<select id="aucPeopleTotal" resultType="bidInfoDTO" parameterType="String"> 
+		select count(*) as totalCount,max(biddingprice) as finalPrice
+		from tblAucList
+		where auctionseq = #{auctionSeq}
+	</select>
+	
+	<select id="biddingNick" resultType="String" parameterType="String">
+		select nickname
+		from tblAucList a inner join tblMember m on a.memberseq = m.memberseq
+		where biddingprice = (select max(biddingprice) from tblAucList where auctionseq = #{auctionSeq})
+	</select>
+
+</mapper>

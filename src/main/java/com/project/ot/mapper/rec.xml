@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rec">
+
+
+<!--  	<resultMap type="ppdto" id="ProjectPackDTO">
+		<result column="name" property="name"/>
+		<result column="price" property="price"/>
+	</resultMap>
+	
+	<resultMap type="fdto" id="FundingDTO">
+		<result column="regdate" property="regdate"/>
+		<collection property="ProjectPackDTO" resultMap="ProjectPackDTO"/>
+		<collection property="MemberDTO" resultMap="MemberDTO"/>
+	</resultMap>
+	
+	
+	<select id="slist" resultType="fdto" parameterType="String">
+		select
+			m.nickname,
+			pp.name,
+			pp.price,
+			f.regdate
+		from tblMember m 
+			inner join tblFunding f
+				on f.memberSeq = m.memberSeq
+					inner join tblProjectPack pp
+						on f.packageSeq = pp.packageSeq
+							where pp.projectSeq = #{projectSeq} and m.memberSeq = #{memberSeq}
+	</select>  -->
+
+	
+	
+	<!--가계부 데이터 입력 -->
+<!--  	<insert id="add" parameterType="edto">
+		insert into tblExpense(expenseSeq, isProfit, price, content, regdate, projectSeq)  
+			values(expenseSeq.nextVal, #{isProfit}, #{price}, #{content}, #{regdate}, #{projectSeq});
+	</insert>  -->
+	
+	
+	
+	<!-- 수입목록 -->
+	<select id="inlist" resultType="edto" parameterType="String">
+		select * from tblExpense 
+			where projectSeq = #{projectSeq} and isProfit = '수입'
+				order by regdate
+	</select>
+	
+	<!-- 지출목록 -->
+	<select id="outlist" resultType="edto" parameterType="String">
+		select * from tblExpense 
+			where projectSeq = #{projectSeq} and isProfit = '지출'
+				order by regdate
+	</select>
+
+
+
+</mapper>

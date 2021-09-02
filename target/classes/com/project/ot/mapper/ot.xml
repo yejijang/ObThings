@@ -6,8 +6,7 @@
 
 	<!-- 로그인하기 -->
 	<select id="signin" parameterType="map" resultType="mdto">
-		select memberSeq, id, password, name, nickName, phone, birth, gender, email,
-		address
+		select memberSeq, id, password, name, nickName, phone, birth, gender, email, point, profileimage, address
 		from tblMember
 		where id= #{id} and password = #{password}
 	</select>

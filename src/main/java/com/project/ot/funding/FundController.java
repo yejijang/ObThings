@@ -29,6 +29,7 @@ public class FundController {
 	@Autowired
 	private FundingDAO dao;
 
+	// 펀딩하기 메인 페이지
 	@RequestMapping(value = "/funding/fundmain.action", method = { RequestMethod.GET })
 	public String main(HttpServletRequest req, HttpServletResponse resp, HttpSession session, String categoryseq) {
 
@@ -93,6 +94,7 @@ public class FundController {
 		return "funding.fundmain";
 	}
 
+	// 펀딩하기 프로젝트 상세 페이지
 	@RequestMapping(value = "/funding/funding.action", method = { RequestMethod.GET })
 	public String funding(HttpServletRequest req, HttpServletResponse resp, HttpSession session, String projectseq) {
 
@@ -101,8 +103,8 @@ public class FundController {
 		String projectTotalMember = dao.projectTotalMember(projectseq); // 프로젝트 총 후원자수
 		String totalPrice = dao.totalPrice(projectseq); // 프로젝트 총 후원금액
 		List<ProjectPackDTO> projectPackList = dao.projectPackList(projectseq); // 프로젝트 패키지 리스트
-		List<String> genderList = dao.genderList(projectseq); // 프로젝트 후원자 성비 리스트
-		List<ProjectAgeGroupDTO> ageGroupList = dao.ageGroupList(projectseq); // 프로젝트 후원자 연령대 리스트
+		List<ProjectMemberDTO> genderList = dao.genderList(projectseq); // 프로젝트 후원자 성비 리스트
+		List<ProjectMemberDTO> ageGroupList = dao.ageGroupList(projectseq); // 프로젝트 후원자 연령대 리스트
 		List<NoticeDTO> noticeList = dao.noticeList(projectseq); // 프로젝트 공지사항 리스트
 
 		if (session.getAttribute("memberSeq") != null) {
@@ -137,6 +139,7 @@ public class FundController {
 		return "funding.funding";
 	}
 
+	// 문의사항 전송
 	@RequestMapping(value = "/funding/sendqa.action", method = { RequestMethod.POST })
 	public void sendqa(HttpServletRequest req, HttpServletResponse resp, HttpSession session, QADTO dto,
 			String projectSeq) {
@@ -154,6 +157,7 @@ public class FundController {
 		}
 	}
 
+	// 신고내역 전송
 	@RequestMapping(value = "/funding/sendwarn.action", method = { RequestMethod.POST })
 	public void sendwarn(HttpServletRequest req, HttpServletResponse resp, HttpSession session, String warnCategory,
 			String content, WarningDTO dto, String projectSeq) {
@@ -171,6 +175,7 @@ public class FundController {
 		}
 	}
 
+	// 펀딩하기 프로젝트 결제 페이지
 	@RequestMapping(value = "/funding/fundpayment.action", method = { RequestMethod.GET })
 	public String fundpayment(HttpServletRequest req, HttpServletResponse resp, HttpSession session, String projectSeq,
 			String packageSeq) {
@@ -210,20 +215,18 @@ public class FundController {
 		dao.paycomplete(dto);
 	}
 	
+	// 찜하기 내역 삭제
 	@RequestMapping(value = "/funding/dellike.action", method = { RequestMethod.POST })
 	@ResponseBody
 	public int dellike(HttpServletRequest req, HttpServletResponse resp, HttpSession session, LikeDTO dto) {
 
-		System.out.println(dto.getMemberSeq());
-		System.out.println(dto.getProjectSeq());
-
 		return dao.dellike(dto);
 	}
 	
+	// 찜하기 내역 추가
 	@RequestMapping(value = "/funding/addlike.action", method = { RequestMethod.POST })
 	@ResponseBody
 	public int addlike(HttpServletRequest req, HttpServletResponse resp, HttpSession session, LikeDTO dto) {
-
 
 		return dao.addlike(dto);
 	}

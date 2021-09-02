@@ -73,12 +73,12 @@ public class FundingDAO {
 		return template.selectList("fund.projectPackList", projectseq);
 	}
 
-	public List<String> genderList(String projectseq) {
+	public List<ProjectMemberDTO> genderList(String projectseq) {
 
 		return template.selectList("fund.genderList", projectseq);
 	}
 
-	public List<ProjectAgeGroupDTO> ageGroupList(String projectseq) {
+	public List<ProjectMemberDTO> ageGroupList(String projectseq) {
 
 		return template.selectList("fund.ageGroupList", projectseq);
 	}

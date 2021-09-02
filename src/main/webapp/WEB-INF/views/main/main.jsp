@@ -20,7 +20,7 @@
 			<div class="col-12 col-md-3 mb-4 fundItem">
 				<div class="card h-80" data-projectseq="${dto.projectSeq}">
 					<div class="card-image">
-						<img src="/ot/resources/img/${dto.thumImage}" class="card-img-top"
+						<img src="/ot/resources/img/projectimage/${dto.thumImage}" class="card-img-top"
 							alt="projectImage_${dto.thumImage}">
 					</div>
 					<div class="card-body">
@@ -84,7 +84,7 @@
 			<div class="col-12 col-md-3 mb-4 fundItem">
 				<div class="card h-80" data-projectseq="${dto.projectSeq}">
 					<div class="card-image">
-						<img src="/ot/resources/img/${dto.thumImage}" class="card-img-top"
+						<img src="/ot/resources/img/projectimage/${dto.thumImage}" class="card-img-top"
 							alt="projectImage_${dto.thumImage}">
 					</div>
 					<div class="card-body">
@@ -148,7 +148,7 @@
 			<div class="col-12 col-md-3 mb-4 fundItem">
 				<div class="card h-80" data-projectseq="${dto.projectSeq}">
 					<div class="card-image">
-						<img src="/ot/resources/img/${dto.thumImage}" class="card-img-top"
+						<img src="/ot/resources/img/projectimage/${dto.thumImage}" class="card-img-top"
 							alt="projectImage_${dto.thumImage}">
 					</div>
 					<div class="card-body">

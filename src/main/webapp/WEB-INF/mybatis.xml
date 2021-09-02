@@ -8,17 +8,35 @@
    
    <typeAliases>
    
+		<!-- 로그인위해서 -->
    		<typeAlias type="com.project.ot.MemberDTO" alias="mdto" />
-   	
-   	 	<typeAlias type="com.project.ot.funding.ProjectDTO" alias="projdto"/>
+   
+   		<!-- DTO별칭 -->
+   		<typeAlias type="com.project.ot.recfunding.ProcessDTO" alias="procdto" />
+  		<typeAlias type="com.project.ot.recfunding.MessageDTO" alias="messagedto" />
+   		
+   		<!-- 예지님 파트 -->         
+        <typeAlias type="com.project.ot.funding.ProjectDTO" alias="projdto"/>
    		<typeAlias type="com.project.ot.funding.CategoryDTO" alias="fundcategorydto"/>
    		<typeAlias type="com.project.ot.funding.ProjectPackDTO" alias="fundprojectpackdto"/>
-   		<typeAlias type="com.project.ot.funding.ProjectAgeGroupDTO" alias="fundprojectagegroupdto"/>
+   		<typeAlias type="com.project.ot.funding.ProjectMemberDTO" alias="fundprojectmemberdto"/>
    		<typeAlias type="com.project.ot.funding.NoticeDTO" alias="noticedto"/>
    		<typeAlias type="com.project.ot.funding.QADTO" alias="qadto"/>
    		<typeAlias type="com.project.ot.funding.WarningDTO" alias="fundwarningdto"/>
    		<typeAlias type="com.project.ot.funding.FundingDTO" alias="fundingdto"/>
    		<typeAlias type="com.project.ot.funding.LikeDTO" alias="fundlikedto"/>
+   	
+   		<!--지원님파트 -->
+   		<typeAlias type="com.project.ot.recfunding.ExpenseDTO" alias="edto" />
+   		
+   		<!-- 지민님 파트 -->
+   		<typeAlias type="com.project.ot.auction.OtAuctionDTO" alias="auctionDTO"/>
+        <typeAlias type="com.project.ot.auction.OtAucListDTO" alias="aucListDTO"/>
+        <typeAlias type="com.project.ot.auction.OtAuctionBiddingInfoDTO" alias="bidInfoDTO"/>
+
+ 		<!-- 변소윤 -->
+  		<typeAlias type="com.project.ot.mypage.MyLikeDTO" alias="MyLikedto" />
+        <typeAlias type="com.project.ot.mypage.MyFundingDTO" alias="MyFunddto" />
    	
    </typeAliases>
    

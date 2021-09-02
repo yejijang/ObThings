@@ -51,13 +51,18 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/ot/funding/fundmain.action">펀딩하기</a>
                         </li>
-                        
+                        <c:if test="${not empty id}">
                         <li class="nav-item">
                             <a class="nav-link" href="/ot/recfunding/recmain.action">펀딩받기</a>
                         </li>
-                        
+                        </c:if>
+                        <c:if test="${empty id}">
+                        	<li class="nav-item">
+                        		<a class="nav-link" href="/ot/main/signin.action">펀딩받기</a>
+                        	</li>
+                        </c:if>
                         <li class="nav-item">
-                            <a class="nav-link" href="shop.html">경매</a>
+                            <a class="nav-link" href="/ot/auction/auction.action">경매</a>
                         </li>
                     </ul>
                 </div>
@@ -73,10 +78,17 @@
                     <a class="nav-icon d-none d-lg-inline" href="#" data-bs-toggle="modal" data-bs-target="#templatemo_search">
                         <i class="fa fa-fw fa-search text-dark mr-2"></i>
                     </a>
-                    <a class="nav-icon position-relative text-decoration-none" href="#">
-                       마이페이지
-                    </a>
-                    <a class="nav-icon position-relative text-decoration-none" href="#">
+                    <c:if test="${not empty id}">
+	                    <a class="nav-icon position-relative text-decoration-none" href="/ot/mypage/mpmain.action">
+	                       마이페이지
+	                    </a>
+                    </c:if>
+                    <c:if test="${empty id}">
+	                    <a class="nav-icon position-relative text-decoration-none" href="/ot/main/signin.action">
+	                       마이페이지
+	                    </a>
+                    </c:if>
+                    <a class="nav-icon position-relative text-decoration-none" href="/ot/schedule/schedule.action">
                         <i class="fa fa-fw fa-user text-dark mr-3"></i>
                         <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
                     </a>

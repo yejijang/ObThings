@@ -9,7 +9,7 @@
 		<table class="table payProjectTable">
 			<tr>
 				<td rowspan="3"><img
-					src="/ot/resources/img/${project.thumImage}"
+					src="/ot/resources/img/projectimage/${project.thumImage}"
 					alt="projectImage_${project.thumImage}"></td>
 				<td>${project.categoryName}|<c:if
 						test="${not empty project.teamName}">
@@ -158,7 +158,7 @@
 					});
 	              
 				//성공시 이동할 페이지
-				alert("결제가 완료되었습니다.");
+				alert("결제가 완료되었습니다. :)");
 				location.href='/ot/funding/funding.action?projectseq=' + ${project.projectSeq};
 				
 				} else {

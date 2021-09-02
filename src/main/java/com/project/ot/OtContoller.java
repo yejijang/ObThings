@@ -21,7 +21,7 @@ public class OtContoller {
 
 	@Autowired
 	private OtDAO dao;
-	
+
 	@RequestMapping(value = "/main/main.action", method = { RequestMethod.GET })
 	public String main(HttpServletRequest req, HttpServletResponse resp, HttpSession session) {
 
@@ -56,7 +56,7 @@ public class OtContoller {
 		req.setAttribute("succList", succList);
 		req.setAttribute("populList", populList);
 		req.setAttribute("newList", newList);
-		
+
 		return "main.main";
 	}
 
@@ -85,12 +85,18 @@ public class OtContoller {
 		String name = signOk.getName();
 		String email = signOk.getEmail();
 		String memberSeq = signOk.getMemberSeq();
+		String nickName = signOk.getNickName();
+		String point = signOk.getPoint();
+		String profileimage = signOk.getProfileimage();
 
 		session.setAttribute("id", id);
 		session.setAttribute("password", password);
 		session.setAttribute("name", name);
 		session.setAttribute("email", email);
 		session.setAttribute("memberSeq", memberSeq);
+		session.setAttribute("nickName", nickName);
+		session.setAttribute("point", point);
+		session.setAttribute("profileimage", profileimage);
 
 		System.out.println(memberSeq);
 

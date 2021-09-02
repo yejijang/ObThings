@@ -18,5 +18,20 @@
 		<put-attribute name="main" value="/WEB-INF/views/{1}/{2}.jsp"></put-attribute>
 		
 	</definition>
+	
+	<!-- 따로 -->
+	<definition name="message_ajax_list" template="/WEB-INF/views/recfunding/message_ajax_list.jsp">
+      
+		<put-attribute name="content" value="/WEB-INF/views/{1}.jsp"></put-attribute>  
+		<put-attribute name="asset" value="/WEB-INF/views/inc/asset.jsp"></put-attribute>
+		
+    </definition>
+
+	<definition name="message_content_list" template="/WEB-INF/views/recfunding/message_content_list.jsp">
+      
+		<put-attribute name="content" value="/WEB-INF/views/{1}.jsp"></put-attribute>  
+       	<put-attribute name="asset" value="/WEB-INF/views/inc/asset.jsp"></put-attribute>
+       	
+    </definition>
 
 </tiles-definitions>

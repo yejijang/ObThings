@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- test.xml -->
+<!--  
+	Mapper 파일
+	- SQL을 작성하는 파일
+-->
+<mapper namespace="recot">
+
+	<!-- 진행상황 목록 -->
+	<select id="proclist" parameterType="map" resultType="procdto">
+			select 
+			    p.title,
+			    p.regDate
+			from tblProcess p 
+			    inner join tblFunding f
+			        on p.fundingSeq = f.fundingseq
+			            inner join tblProjectPack pp
+			                on pp.packageseq = f.packageseq
+			                    inner join tblProject j
+			                        on j.projectSeq = pp.projectseq 
+			                            where j.memberSeq = #{memberSeq} and j.projectseq=#{projectSeq} <![CDATA[and p.regDate < sysdate]]>
+			                            	 order by p.regDate desc
+	</select>
+	
+	<!-- 프로젝트 목록 -->
+	<select id="projlist" parameterType="String" resultType="projdto">
+			select 
+				* 
+			from tblProject j
+			    inner join tblMember m
+			        on j.memberSeq = m.memberseq 
+			            where m.id = #{id}
+	</select>
+	
+	<!-- 공지사항 목록 -->
+	<select id="noticelist" parameterType="String" resultType="noticedto">
+		select * from tblNotice where projectSeq=#{projectSeq} order by noticeSeq desc
+	</select>
+	
+	
+	<!-- 공지사항 작성하기 -->
+	<insert id="noticeaddok"  parameterType="noticedto">
+		insert into tblNotice (noticeSeq, subject, content, readCount, regdate, projectSeq)
+   	 		values (noticeSeq.nextVal, #{subject}, #{content}, default, default, #{projectSeq})
+	</insert>
+	
+	<!-- 문의사항첫번째화면 리스트 띄우기 -->
+	<select id="messageList" parameterType="messagedto" resultType="messagedto">
+		select qaSeq2, room, fromMemberSeq, toMemberSeq, sendTime, readTime, content, readchk
+		    from tblQA2
+			    where qaSeq2 in (select max(qaSeq2) from tblQA2 group by room) and (fromMemberSeq = #{myMember} or toMemberSeq=#{myMember}) and projectSeq=#{projectSeq, jdbcType=NUMERIC}
+			    order by qaSeq2 asc
+	</select>
+	
+	<!-- 안읽은 메세지 갯수 -->
+	<select id="countRead" parameterType="messagedto" resultType="int">
+		select count(qaSeq2) from tblQA2 
+   			 where toMemberSeq=#{myMember} and readchk='y' and room=#{room}
+	
+	</select>
+	
+	<!-- 프로필사진가져오기 -->
+	<select id="getProfile" parameterType="messagedto" resultType="String">
+		select profileImage from tblMember
+		    <choose>
+		        <when test="fromMemberSeq == myMember">
+		            where memberSeq = #{toMemberSeq}
+		        </when>
+		        <otherwise>
+		            where memberSeq = #{fromMemberSeq}
+		        </otherwise>
+		    </choose>
+	</select>
+	
+	<!-- 방번호로 들어가서 메세지내용 가져오기 -->
+	<select id="room_content_list" parameterType="messagedto" resultType="messagedto">
+		select a.qaseq2, a.room, a.fromMemberSeq, a.toMemberSeq, a.sendTime, a.readTime, a.content, a.readchk, m.profileimage, m.nickName
+		    from tblQA2 a left outer join tblMember m
+		   		 on a.fromMemberSeq = m.memberSeq
+    <choose>
+        <when test="room != 0">
+            where room=#{room}
+        </when>
+        <otherwise>
+            where (toMemberSeq = #{toMemberSeq} and fromMemberSeq = #{myMember}) or (fromMemberSeq = #{toMemberSeq} and toMemberSeq = #{myMember})
+        </otherwise>
+    </choose>
+	</select>
+	
+	<!-- 방번호 들어가서 메세지 보내기 -->
+	<insert id="messageSendInList" parameterType="messagedto">
+		
+	<choose>
+        <when test="room != 0">
+            insert into tblQA2 values(qaSeq2.nextVal, #{room},default, default, #{content}, 'y', #{fromMemberSeq}, #{toMemberSeq}, #{projectSeq})
+        </when>
+        <otherwise>
+            insert into tblQA2 values(qaSeq2.nextVal, #{room},default, default, #{content}, 'y', #{fromMemberSeq}, #{toMemberSeq}, #{projectSeq})
+        </otherwise>
+    </choose>
+   
+	</insert>
+	
+	<!-- 읽음처리하기 0=y 읽은거 1=n 안읽은거-->
+	<update id="message_readchk" parameterType="messagedto">
+		update tblQA2 set readchk='n'
+			<choose>
+				<when test="room != 0">
+					where room=#{room} and readchk='y' and toMemberSeq=#{myMember}
+				</when>
+				<otherwise>
+					where fromMemberSeq=#{toMemberSeq} and readchk='y' and toMemberSeq=#{myMember}
+				</otherwise>
+			</choose>
+	
+	</update>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

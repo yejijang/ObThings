@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <fmt:parseDate value="${project.startDate}"
 	pattern="yyyy-MM-dd HH:mm:ss" var="startDate" />
 <fmt:parseDate value="${project.endDate}" pattern="yyyy-MM-dd HH:mm:ss"
@@ -32,7 +33,7 @@
 				</tr>
 				<tr>
 					<td rowspan="5">
-						<img src="/ot/resources/img/${project.thumImage}" alt="projectImage_${project.thumImage}">
+						<img src="/ot/resources/img/projectimage/${project.thumImage}" alt="projectImage_${project.thumImage}">
 					</td>
 					<td colspan="3">
 						<c:if test="${not empty project.teamName}">
@@ -130,7 +131,7 @@
 					<div id="projectDetail">${project.detail}</div>
 					<div id="projectImage">
 						<c:forEach items="${projectImageList}" var="contentImg">
-							<img src="/ot/resources/img/${contentImg}"
+							<img src="/ot/resources/img/projectimage/${contentImg}"
 								alt="contentImage_${contentImg}">
 						</c:forEach>
 					</div>
@@ -188,11 +189,15 @@
 			</c:forEach>
 		</div>
 	</div>
-
+	<!-- 로그인 유무에 따른 멤버 시퀀스 가공 -->
+	<c:set var="member" value="${memberSeq}" />
+	<c:if test="${empty member}"><c:set var="member" value="0" /></c:if>
+	<c:if test="${not empty member}"><c:set var="member" value="${member}" /></c:if>
+	
 </div>
 
 <script>
-	/* 프로젝트 찜하기 */
+	/* 로그인이 되어있는 경우 > 프로젝트 찜하기 */
 	$('#projectLike.like').click(function() {
 		
 		let btn = event.srcElement;
@@ -203,7 +208,7 @@
 			$.ajax({
 				type: 'POST',
 				url: '/ot/funding/dellike.action',
-				data: 'projectSeq=' + ${project.projectSeq} + '&memberSeq=' + ${memberSeq},
+				data: 'projectSeq=' + ${project.projectSeq} + '&memberSeq=' + ${member},
 				dataType: 'json',
 				success: function(result) {
 					if (result == 1) {
@@ -221,7 +226,7 @@
 			$.ajax({
 				type: 'POST',
 				url: '/ot/funding/addlike.action',
-				data: 'projectSeq=' + ${project.projectSeq} + '&memberSeq=' + ${memberSeq},
+				data: 'projectSeq=' + ${project.projectSeq} + '&memberSeq=' + ${member},
 				dataType: 'json',
 				success: function(result) {
 					if (result == 1) {
@@ -284,6 +289,7 @@
 	
 	/* 후원자 성비에 따른 그래프 출력 */
 	<c:if test="${projectTotalMember > 0}">
+	
 		Highcharts.chart('genderChart', {
 			colors: ['#666666', '#999999'],
 		    chart: {
@@ -317,14 +323,12 @@
 		        name: '후원자수',
 		        colorByPoint: true,
 		        data: [
+		        	<c:forEach items="${genderList}" var="dto">
 			        {
-			            name: '남성',
-			            y: ${genderList[0]}
+			            name: '${dto.genderGroup}',
+			            y: ${dto.groupCnt}
 			        },
-			        {
-			            name: '여성',
-			            y: ${genderList[1]}
-			        }
+			        </c:forEach>
 		        ]
 		    }]
 		});
@@ -383,7 +387,7 @@
 		    	<c:forEach items="${ageGroupList}" var="dto">
 		    {
 		        name: '${dto.ageGroup}',
-		        data: [${dto.ageGroupCnt}]
+		        data: [${dto.groupCnt}]
 		    },
 		    	</c:forEach>
 		    ]
